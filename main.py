@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import base64
 import random
@@ -14,6 +14,7 @@ from lecciones import secciones
 from lecciones import secciones_random
 
 app = Flask(__name__)
+CORS(app)
 
 # Metodo para convertir imagen a base64
 def get_image_as_base64(image_filename):
@@ -30,6 +31,19 @@ def get_image_as_base64(image_filename):
         base64_video = base64.b64encode(video_data).decode('utf-8')
     return base64_video """
 
+
+# Ruta para obtener frames de la camara
+@app.route('/process_frame', methods=['POST'])
+def process_frame():
+    try:
+        frame = request.json.get('frame')
+        print(frame)
+        # Realiza aquí el procesamiento del frame (detección de keypoints, etc.)
+        # Agrega la lógica para proporcionar retroalimentación
+        # Devuelve la retroalimentación como respuesta
+        return jsonify({"message": "Frame procesado exitosamente"})
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 # Ruta para obtener todas las lecciones (Con titulo e imagen)
 @app.route('/aprende', methods=['GET'])
