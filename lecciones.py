@@ -1,13 +1,16 @@
 lecciones = [
     {
+        'id': 1,
         'titulo': 'Abecedario',
         'imagen': 'abecedario.png'
     },
     {
+        'id': 2,
         'titulo': 'Saludos',
         'imagen': 'saludos.png'
     },
     {
+        'id': 3,
         'titulo': 'Números',
         'imagen': 'numeros.png'
     }
