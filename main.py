@@ -54,21 +54,21 @@ def getLecciones(id_leccion, id_seccion):
     if id_leccion == 1:
         for item in abecedario:
             if item['id'] == id_seccion:
-                item['imagen'] = get_image_as_base64(item['imagen'])
+                item['imagen64'] = get_image_as_base64(item['imagen'])
                 """ item['video'] = get_video_as_base64(item['video_filename']) """
                 return jsonify(item)
         return jsonify({"error": "Letra no encontrada."}), 404
     elif id_leccion == 2:
         for item in saludos:
             if item['id'] == id_seccion:
-                item['imagen'] = get_image_as_base64(item['imagen'])
+                item['imagen64'] = get_image_as_base64(item['imagen'])
                 """ item['video'] = get_video_as_base64(item['video_filename']) """
                 return jsonify(item)
         return jsonify({"error": "Saludo no encontrado."}), 404
     elif id_leccion == 3:
         for item in numeros:
             if item['id'] == id_seccion:
-                item['imagen'] = get_image_as_base64(item['imagen'])
+                item['imagen64'] = get_image_as_base64(item['imagen'])
                 """ item['video'] = get_video_as_base64(item['video_filename']) """
                 return jsonify(item)
         return jsonify({"error": "Número no encontrado."}), 404
