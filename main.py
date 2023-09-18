@@ -9,10 +9,12 @@ import re
 from lecciones import lecciones
 from lecciones import abecedario
 from lecciones import saludos
-from lecciones import secciones
+from lecciones_temp import secciones
 
 # Array de los IDs de todas las secciones
-from lecciones import secciones_random
+from lecciones_temp import secciones_random
+
+from borrar2 import modelo_prueba
 
 app = Flask(__name__)
 CORS(app)
@@ -38,6 +40,8 @@ def get_image_as_base64(image_filename):
 def process_frame():
     try:
         frame = request.json.get('frame')
+        """ palabra = request.json.get('palabra')
+        print(palabra) """
         if frame.startswith('data:'):
             frame = re.sub('^data:image/.+;base64,', '', frame)
         with open('datos_recibidos.txt', 'w') as archivo:
