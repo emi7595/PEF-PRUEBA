@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import base64
 import random
+import re
 
 # Importar los arrays de las lecciones de lecciones.py
 
@@ -37,11 +38,12 @@ def get_image_as_base64(image_filename):
 def process_frame():
     try:
         frame = request.json.get('frame')
-        print(frame)
-        # Realiza aquí el procesamiento del frame (detección de keypoints, etc.)
-        # Agrega la lógica para proporcionar retroalimentación
-        # Devuelve la retroalimentación como respuesta
-        return jsonify({"message": "Frame procesado exitosamente"})
+        if frame.startswith('data:'):
+            frame = re.sub('^data:image/.+;base64,', '', frame)
+        with open('datos_recibidos.txt', 'w') as archivo:
+            archivo.write(frame)
+        respuesta = modelo_prueba(frame)
+        return jsonify(respuesta)
     except Exception as e:
         return jsonify({"error": str(e)})
 
