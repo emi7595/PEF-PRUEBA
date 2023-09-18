@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import base64
 import random
+import re
 
 # Importar los arrays de las lecciones de lecciones.py
 
@@ -37,11 +38,12 @@ def get_image_as_base64(image_filename):
 def process_frame():
     try:
         frame = request.json.get('frame')
-        print(frame)
-        # Realiza aquí el procesamiento del frame (detección de keypoints, etc.)
-        # Agrega la lógica para proporcionar retroalimentación
-        # Devuelve la retroalimentación como respuesta
-        return jsonify({"message": "Frame procesado exitosamente"})
+        if frame.startswith('data:'):
+            frame = re.sub('^data:image/.+;base64,', '', frame)
+        with open('datos_recibidos.txt', 'w') as archivo:
+            archivo.write(frame)
+        respuesta = modelo_prueba(frame)
+        return jsonify(respuesta)
     except Exception as e:
         return jsonify({"error": str(e)})
 
@@ -55,7 +57,7 @@ def aprende():
 # 1ra Opción
 
 @app.route('/abecedario/<int:id>', methods=['GET'])
-def getAbecedario(id):
+def get_abecedario(id):
     for item in abecedario:
         if item['id'] == id:
             return jsonify(item)
@@ -69,7 +71,7 @@ def getNumeros(id):
     return jsonify({"error": "Número no encontrado."}), 404 """
 
 @app.route('/saludo/<int:id>', methods=['GET'])
-def getSaludos(id):
+def get_saludos(id):
     for item in saludos:
         if item['id'] == (id):
             return jsonify(item)
@@ -77,7 +79,7 @@ def getSaludos(id):
 
 # 2da Opción - Ruta para obtener cierta sección de cierta lección
 @app.route('/lecciones/<int:id_leccion>/<int:id_seccion>', methods=['GET'])
-def getLecciones(id_leccion, id_seccion):
+def get_lecciones(id_leccion, id_seccion):
     if id_leccion == 1:
         for item in abecedario:
             if item['id'] == id_seccion:
@@ -98,7 +100,7 @@ def getLecciones(id_leccion, id_seccion):
 
 ## Array de todas las secciones por lección
 @app.route('/<int:id_leccion>', methods=['GET'])
-def getTodasLasSecciones(id_leccion):
+def get_todas_las_secciones(id_leccion):
     if id_leccion == 1:
         return jsonify(abecedario)
     if id_leccion == 2:
@@ -108,7 +110,7 @@ def getTodasLasSecciones(id_leccion):
     
 # Ruta para "Practica" aleatoriamente elige una seccion de todas las lecciones
 @app.route('/random', methods=['GET'])
-def seccionRandom():
+def seccion_random():
     global secciones_random
     if len(secciones_random) == 0:
         secciones_random = [seccion['id'] for seccion in secciones]
